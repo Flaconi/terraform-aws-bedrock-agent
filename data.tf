@@ -37,6 +37,12 @@ data "aws_iam_policy_document" "agent_permissions" {
       data.aws_bedrock_foundation_model.agent.model_arn,
     ]
   }
+  statement {
+    actions = ["bedrock:Retrieve"]
+    resources = [
+      aws_bedrockagent_knowledge_base.this.arn
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "knowledgebase_trust" {

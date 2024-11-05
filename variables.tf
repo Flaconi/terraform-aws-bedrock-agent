@@ -20,15 +20,19 @@ variable "agent_model_id" {
   default     = "anthropic.claude-v2"
 }
 
+variable "agent_instructions" {
+  description = "Model identifier for agent."
+  type        = string
+}
+
 variable "knowledgebase_name" {
   description = "Name for the knowledgebase."
   type        = string
 }
 
-variable "knowledgebase_decription" {
+variable "knowledgebase_description" {
   description = "Description for the knowledgebase."
   type        = string
-  default     = null
 }
 
 variable "knowledgebase_model_id" {

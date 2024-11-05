@@ -20,6 +20,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.73 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12 |
 
 <!-- TFDOCS_PROVIDER_END -->
 
@@ -30,6 +31,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.73 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
 
 <!-- TFDOCS_REQUIREMENTS_END -->
 
@@ -50,9 +52,21 @@ Description: Name for the agent alias.
 
 Type: `string`
 
+### <a name="input_agent_instructions"></a> [agent\_instructions](#input\_agent\_instructions)
+
+Description: Model identifier for agent.
+
+Type: `string`
+
 ### <a name="input_knowledgebase_name"></a> [knowledgebase\_name](#input\_knowledgebase\_name)
 
 Description: Name for the knowledgebase.
+
+Type: `string`
+
+### <a name="input_knowledgebase_description"></a> [knowledgebase\_description](#input\_knowledgebase\_description)
+
+Description: Description for the knowledgebase.
 
 Type: `string`
 
@@ -87,14 +101,6 @@ Description: Model identifier for agent.
 Type: `string`
 
 Default: `"anthropic.claude-v2"`
-
-### <a name="input_knowledgebase_decription"></a> [knowledgebase\_decription](#input\_knowledgebase\_decription)
-
-Description: Description for the knowledgebase.
-
-Type: `string`
-
-Default: `null`
 
 ### <a name="input_knowledgebase_model_id"></a> [knowledgebase\_model\_id](#input\_knowledgebase\_model\_id)
 
