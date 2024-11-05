@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
     actions = ["aoss:APIAccessAll"]
     resources = [
-      var.oss_arn
+      aws_opensearchserverless_collection.this.arn
     ]
   }
   statement {

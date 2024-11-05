@@ -9,6 +9,9 @@ module "agent" {
   knowledgebase_name        = "my-knowledgebase"
   knowledgebase_description = "Description for my knowledgebase"
 
-  s3_arn  = "arn:aws:s3:::some-data-s3-bucket"
-  oss_arn = "arn:aws:aoss:eu-central-1:123456789101:collection/some-collection"
+  s3_arn = var.s3_arn
+
+  oss_collection_name = var.oss_collection_name
+
+  oss_additional_roles_arns = var.oss_additional_roles_arns
 }

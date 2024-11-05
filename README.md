@@ -20,6 +20,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.73 |
+| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | = 2.2.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12 |
 
 <!-- TFDOCS_PROVIDER_END -->
@@ -31,6 +32,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.73 |
+| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
 
 <!-- TFDOCS_REQUIREMENTS_END -->
@@ -76,9 +78,9 @@ Description: ARN of S3 bucket with data
 
 Type: `string`
 
-### <a name="input_oss_arn"></a> [oss\_arn](#input\_oss\_arn)
+### <a name="input_oss_collection_name"></a> [oss\_collection\_name](#input\_oss\_collection\_name)
 
-Description: ARN of OpenSearch Serverless Collection.
+Description: Name of OpenSearch Serverless Collection.
 
 Type: `string`
 
@@ -109,6 +111,14 @@ Description: Model identifier for Knowledgebase.
 Type: `string`
 
 Default: `"amazon.titan-embed-text-v1"`
+
+### <a name="input_oss_additional_roles_arns"></a> [oss\_additional\_roles\_arns](#input\_oss\_additional\_roles\_arns)
+
+Description: Additional ARNs of roles to access OpenSearch
+
+Type: `list(string)`
+
+Default: `[]`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 

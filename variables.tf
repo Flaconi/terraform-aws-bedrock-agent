@@ -46,9 +46,15 @@ variable "s3_arn" {
   type        = string
 }
 
-variable "oss_arn" {
-  description = "ARN of OpenSearch Serverless Collection."
+variable "oss_collection_name" {
+  description = "Name of OpenSearch Serverless Collection."
   type        = string
+}
+
+variable "oss_additional_roles_arns" {
+  description = "Additional ARNs of roles to access OpenSearch"
+  type        = list(string)
+  default     = []
 }
 
 variable "tags" {
