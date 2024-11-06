@@ -32,6 +32,8 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_resources"></a> [resources](#output\_resources) | Information about created resources |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

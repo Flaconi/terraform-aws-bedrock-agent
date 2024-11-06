@@ -133,7 +133,12 @@ Default: `{}`
 <!-- TFDOCS_OUTPUTS_START -->
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_agent"></a> [agent](#output\_agent) | Information about created Bedrock Agent |
+| <a name="output_agent_alias"></a> [agent\_alias](#output\_agent\_alias) | Information about created Bedrock Agent Alias |
+| <a name="output_knowledge_base"></a> [knowledge\_base](#output\_knowledge\_base) | Information about created Bedrock Knowledgebase |
+| <a name="output_oss_collection"></a> [oss\_collection](#output\_oss\_collection) | Information about created OpenSearch Serverless collection |
 
 <!-- TFDOCS_OUTPUTS_END -->
 

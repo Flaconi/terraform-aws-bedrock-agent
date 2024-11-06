@@ -105,7 +105,7 @@ resource "aws_opensearchserverless_access_policy" "data_policy" {
       ],
       Principal = concat([
         aws_iam_role.knowledgebase.arn,
-        data.aws_caller_identity.current.arn
+        data.aws_caller_identity.this.arn
         ],
         var.oss_additional_roles_arns
       )
