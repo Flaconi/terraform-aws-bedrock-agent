@@ -20,6 +20,8 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.73 |
+| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | = 2.2.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12 |
 
 <!-- TFDOCS_PROVIDER_END -->
 
@@ -30,6 +32,8 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.73 |
+| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
 
 <!-- TFDOCS_REQUIREMENTS_END -->
 
@@ -50,9 +54,21 @@ Description: Name for the agent alias.
 
 Type: `string`
 
+### <a name="input_agent_instructions"></a> [agent\_instructions](#input\_agent\_instructions)
+
+Description: Model identifier for agent.
+
+Type: `string`
+
 ### <a name="input_knowledgebase_name"></a> [knowledgebase\_name](#input\_knowledgebase\_name)
 
 Description: Name for the knowledgebase.
+
+Type: `string`
+
+### <a name="input_knowledgebase_description"></a> [knowledgebase\_description](#input\_knowledgebase\_description)
+
+Description: Description for the knowledgebase.
 
 Type: `string`
 
@@ -62,9 +78,9 @@ Description: ARN of S3 bucket with data
 
 Type: `string`
 
-### <a name="input_oss_arn"></a> [oss\_arn](#input\_oss\_arn)
+### <a name="input_oss_collection_name"></a> [oss\_collection\_name](#input\_oss\_collection\_name)
 
-Description: ARN of OpenSearch Serverless Collection.
+Description: Name of OpenSearch Serverless Collection.
 
 Type: `string`
 
@@ -88,14 +104,6 @@ Type: `string`
 
 Default: `"anthropic.claude-v2"`
 
-### <a name="input_knowledgebase_decription"></a> [knowledgebase\_decription](#input\_knowledgebase\_decription)
-
-Description: Description for the knowledgebase.
-
-Type: `string`
-
-Default: `null`
-
 ### <a name="input_knowledgebase_model_id"></a> [knowledgebase\_model\_id](#input\_knowledgebase\_model\_id)
 
 Description: Model identifier for Knowledgebase.
@@ -103,6 +111,14 @@ Description: Model identifier for Knowledgebase.
 Type: `string`
 
 Default: `"amazon.titan-embed-text-v1"`
+
+### <a name="input_oss_additional_roles_arns"></a> [oss\_additional\_roles\_arns](#input\_oss\_additional\_roles\_arns)
+
+Description: Additional ARNs of roles to access OpenSearch
+
+Type: `list(string)`
+
+Default: `[]`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
@@ -117,7 +133,12 @@ Default: `{}`
 <!-- TFDOCS_OUTPUTS_START -->
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_agent"></a> [agent](#output\_agent) | Information about created Bedrock Agent |
+| <a name="output_agent_alias"></a> [agent\_alias](#output\_agent\_alias) | Information about created Bedrock Agent Alias |
+| <a name="output_knowledge_base"></a> [knowledge\_base](#output\_knowledge\_base) | Information about created Bedrock Knowledgebase |
+| <a name="output_oss_collection"></a> [oss\_collection](#output\_oss\_collection) | Information about created OpenSearch Serverless collection |
 
 <!-- TFDOCS_OUTPUTS_END -->
 
