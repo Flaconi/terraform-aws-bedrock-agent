@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
     actions = ["s3:GetObject"]
     resources = [
-      "${var.s3_configuration.bucket_arn}/${var.s3_configuration.inclusion_prefixes}*"
+      "${var.s3_configuration.bucket_arn}/*"
     ]
     condition {
       test     = "StringEquals"
