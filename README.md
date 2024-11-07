@@ -112,6 +112,14 @@ Type: `string`
 
 Default: `"amazon.titan-embed-text-v1"`
 
+### <a name="input_knowledgebase_data_deletion_policy"></a> [knowledgebase\_data\_deletion\_policy](#input\_knowledgebase\_data\_deletion\_policy)
+
+Description: Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`
+
+Type: `string`
+
+Default: `"RETAIN"`
+
 ### <a name="input_oss_additional_roles_arns"></a> [oss\_additional\_roles\_arns](#input\_oss\_additional\_roles\_arns)
 
 Description: Additional ARNs of roles to access OpenSearch
