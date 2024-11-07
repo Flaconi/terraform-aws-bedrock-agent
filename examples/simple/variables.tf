@@ -1,11 +1,10 @@
-variable "s3_arn" {
+variable "s3_configuration" {
   description = "ARN of S3 bucket with data"
-  type        = string
-}
-
-variable "oss_collection_name" {
-  description = "Name of OpenSearch Serverless Collection."
-  type        = string
+  type = object({
+    bucket_arn              = string
+    bucket_owner_account_id = optional(string)
+    inclusion_prefixes      = optional(set(string), [])
+  })
 }
 
 variable "oss_additional_roles_arns" {

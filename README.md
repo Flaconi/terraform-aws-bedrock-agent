@@ -7,7 +7,6 @@ Terraform module for Amazon Bedrock Agent resources
 [![Tag](https://img.shields.io/github/tag/flaconi/terraform-aws-bedrock-agent.svg)](https://github.com/flaconi/terraform-aws-bedrock-agent/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-For requirements regarding module structure: [style-guide-terraform.md](https://github.com/Flaconi/devops-docs/blob/master/doc/conventions/style-guide-terraform.md)
 
 <!-- TFDOCS_HEADER_START -->
 
@@ -20,7 +19,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.73 |
-| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | = 2.2.0 |
+| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | ~> 2.2 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12 |
 
 <!-- TFDOCS_PROVIDER_END -->
@@ -32,7 +31,7 @@ For requirements regarding module structure: [style-guide-terraform.md](https://
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.73 |
-| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | = 2.2.0 |
+| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | ~> 2.2 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
 
 <!-- TFDOCS_REQUIREMENTS_END -->
@@ -72,11 +71,19 @@ Description: Description for the knowledgebase.
 
 Type: `string`
 
-### <a name="input_s3_arn"></a> [s3\_arn](#input\_s3\_arn)
+### <a name="input_s3_configuration"></a> [s3\_configuration](#input\_s3\_configuration)
 
 Description: ARN of S3 bucket with data
 
-Type: `string`
+Type:
+
+```hcl
+object({
+    bucket_arn              = string
+    bucket_owner_account_id = optional(string)
+    inclusion_prefixes      = optional(set(string), [])
+  })
+```
 
 ### <a name="input_oss_collection_name"></a> [oss\_collection\_name](#input\_oss\_collection\_name)
 

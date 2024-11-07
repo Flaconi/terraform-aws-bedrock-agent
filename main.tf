@@ -219,7 +219,9 @@ resource "aws_bedrockagent_data_source" "this" {
   data_source_configuration {
     type = "S3"
     s3_configuration {
-      bucket_arn = var.s3_arn
+      bucket_arn              = var.s3_configuration.bucket_arn
+      bucket_owner_account_id = var.s3_configuration.bucket_owner_account_id
+      inclusion_prefixes      = var.s3_configuration.inclusion_prefixes
     }
   }
   data_deletion_policy = var.knowledgebase_data_deletion_policy
