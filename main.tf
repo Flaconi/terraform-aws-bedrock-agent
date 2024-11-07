@@ -2,26 +2,44 @@ resource "aws_iam_role" "agent" {
   assume_role_policy = data.aws_iam_policy_document.agent_trust.json
   name_prefix        = "BedrockExecutionRoleForAgents_"
   path               = "/service-role/"
+
+  tags = var.tags
 }
 
-resource "aws_iam_role_policy" "agent" {
+resource "aws_iam_policy" "agent" {
   policy = data.aws_iam_policy_document.agent_permissions.json
-  role   = aws_iam_role.agent.id
+  name   = aws_iam_role.agent.name
+  path   = "/service-role/"
+
+  tags = var.tags
+}
+
+resource "aws_iam_role_policy_attachment" "agent" {
+  role       = aws_iam_role.agent.id
+  policy_arn = aws_iam_policy.agent.arn
 }
 
 resource "aws_iam_role" "knowledgebase" {
   assume_role_policy = data.aws_iam_policy_document.knowledgebase_trust.json
   name_prefix        = "BedrockExecutionRoleForKnowledgeBase_"
   path               = "/service-role/"
+
+  tags = var.tags
 }
 
-resource "aws_iam_role_policy" "knowledgebase" {
+resource "aws_iam_policy" "knowledgebase" {
   policy = data.aws_iam_policy_document.knowledgebase_permissions.json
-  role   = aws_iam_role.knowledgebase.id
+  name   = aws_iam_role.knowledgebase.name
+  path   = "/service-role/"
+
+  tags = var.tags
 }
 
-# – OpenSearch Serverless Default –
-# Create a Collection
+resource "aws_iam_role_policy_attachment" "knowledgebase" {
+  role       = aws_iam_role.knowledgebase.id
+  policy_arn = aws_iam_policy.knowledgebase.arn
+}
+
 resource "aws_opensearchserverless_collection" "this" {
   name        = var.oss_collection_name
   type        = "VECTORSEARCH"
@@ -30,11 +48,13 @@ resource "aws_opensearchserverless_collection" "this" {
     aws_opensearchserverless_security_policy.security_policy,
     aws_opensearchserverless_security_policy.nw_policy
   ]
+
+  tags = var.tags
 }
 
 # Encryption Security Policy
 resource "aws_opensearchserverless_security_policy" "security_policy" {
-  name = "oss-security-policy-${var.oss_collection_name}"
+  name = var.oss_collection_name
   type = "encryption"
   policy = jsonencode({
     Rules = [
@@ -49,7 +69,7 @@ resource "aws_opensearchserverless_security_policy" "security_policy" {
 
 # Network policy
 resource "aws_opensearchserverless_security_policy" "nw_policy" {
-  name = "nw-policy-${var.oss_collection_name}"
+  name = var.oss_collection_name
   type = "network"
   policy = jsonencode([
     {
@@ -79,7 +99,7 @@ resource "aws_opensearchserverless_security_policy" "nw_policy" {
 
 # Data policy
 resource "aws_opensearchserverless_access_policy" "data_policy" {
-  name = "oss-access-policy-${var.oss_collection_name}"
+  name = var.oss_collection_name
   type = "data"
   policy = jsonencode([
     {
@@ -188,6 +208,8 @@ resource "aws_bedrockagent_knowledge_base" "this" {
     }
   }
 
+  tags = var.tags
+
   depends_on = [time_sleep.wait_after_index_creation]
 }
 
@@ -200,6 +222,9 @@ resource "aws_bedrockagent_data_source" "this" {
       bucket_arn = var.s3_arn
     }
   }
+  data_deletion_policy = var.knowledgebase_data_deletion_policy
+
+  depends_on = [aws_iam_role_policy_attachment.knowledgebase]
 }
 
 resource "aws_bedrockagent_agent" "this" {
@@ -212,12 +237,8 @@ resource "aws_bedrockagent_agent" "this" {
   depends_on = [
     aws_bedrockagent_knowledge_base.this
   ]
-}
 
-resource "aws_bedrockagent_agent_alias" "this" {
-  agent_alias_name = var.alias_name
-  agent_id         = aws_bedrockagent_agent.this.agent_id
-  description      = var.alias_description
+  tags = var.tags
 }
 
 resource "time_sleep" "wait_10_seconds" {
@@ -233,4 +254,12 @@ resource "aws_bedrockagent_agent_knowledge_base_association" "this" {
   knowledge_base_state = "ENABLED"
 
   depends_on = [time_sleep.wait_10_seconds]
+}
+
+resource "aws_bedrockagent_agent_alias" "this" {
+  agent_alias_name = var.alias_name
+  agent_id         = aws_bedrockagent_agent.this.agent_id
+  description      = var.alias_description
+
+  depends_on = [aws_bedrockagent_agent_knowledge_base_association.this]
 }
