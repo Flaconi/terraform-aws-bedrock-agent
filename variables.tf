@@ -54,6 +54,11 @@ variable "s3_configuration" {
     bucket_owner_account_id = optional(string)
     inclusion_prefixes      = optional(set(string))
   })
+
+  validation {
+    condition     = var.s3_configuration.inclusion_prefixes == null ? true : length(var.s3_configuration.inclusion_prefixes) == 1
+    error_message = "For now s3 data source support only one prefix."
+  }
 }
 
 variable "oss_collection_name" {
