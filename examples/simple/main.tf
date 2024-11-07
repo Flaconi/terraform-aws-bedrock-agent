@@ -14,4 +14,8 @@ module "agent" {
   oss_collection_name = var.oss_collection_name
 
   oss_additional_roles_arns = var.oss_additional_roles_arns
+
+  tags = {
+    Project = "example"
+  }
 }
