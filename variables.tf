@@ -41,7 +41,7 @@ variable "knowledgebase_model_id" {
   default     = "amazon.titan-embed-text-v1"
 }
 
-variable "knowledgebase_data_deletion_policy"  {
+variable "knowledgebase_data_deletion_policy" {
   description = "Data deletion policy for a data source. Valid values: `RETAIN`, `DELETE`"
   type        = string
   default     = "RETAIN"
