@@ -159,14 +159,6 @@ resource "opensearch_index" "default_oss_index" {
             },
             "space_type": "l2"
           }
-        },
-        "AMAZON_BEDROCK_METADATA": {
-          "type": "text",
-          "index": "false"
-        },
-        "AMAZON_BEDROCK_TEXT_CHUNK": {
-          "type": "text",
-          "index": "true"
         }
       }
     }
@@ -177,6 +169,10 @@ resource "opensearch_index" "default_oss_index" {
     aws_opensearchserverless_access_policy.data_policy,
     aws_opensearchserverless_collection.this
   ]
+
+  lifecycle {
+    ignore_changes = [mappings]
+  }
 }
 
 # OpenSearch index
