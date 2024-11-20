@@ -219,6 +219,45 @@ resource "aws_bedrockagent_data_source" "this" {
       inclusion_prefixes      = var.s3_configuration.inclusion_prefixes
     }
   }
+
+  vector_ingestion_configuration {
+    chunking_configuration {
+      chunking_strategy = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy
+
+      dynamic "fixed_size_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "FIXED_SIZE" ? [1] : []
+        content {
+          max_tokens        = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.max_tokens
+          overlap_percentage = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.overlap_percentage
+        }
+      }
+
+      dynamic "hierarchical_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "HIERARCHICAL" ? [1] : []
+        content {
+          overlap_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.overlap_tokens
+
+          level_configuration {
+            max_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.level_1.max_tokens
+          }
+
+          level_configuration {
+            max_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.level_2.max_tokens
+          }
+        }
+      }
+
+      dynamic "semantic_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "SEMANTIC" ? [1] : []
+        content {
+          breakpoint_percentile_threshold = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.breakpoint_percentile_threshold
+          buffer_size                    = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.buffer_size
+          max_token                      = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.max_token
+        }
+      }
+    }
+  }
+
   data_deletion_policy = var.knowledgebase_data_deletion_policy
 
   depends_on = [aws_iam_role_policy_attachment.knowledgebase]

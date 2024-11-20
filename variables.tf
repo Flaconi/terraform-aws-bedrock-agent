@@ -54,10 +54,46 @@ variable "s3_configuration" {
     bucket_owner_account_id = optional(string)
     inclusion_prefixes      = optional(set(string))
   })
-
   validation {
     condition     = var.s3_configuration.inclusion_prefixes == null ? true : length(var.s3_configuration.inclusion_prefixes) == 1
     error_message = "For now s3 data source support only one prefix."
+  }
+}
+
+variable "vector_ingestion_configuration" {
+  type = object({
+    chunking_configuration = object({
+      chunking_strategy = string
+      fixed_size_chunking_configuration = optional(object({
+        max_tokens        = number
+        overlap_percentage = optional(number)
+      }))
+      hierarchical_chunking_configuration = optional(object({
+        overlap_tokens = number
+        level_1        = object({ max_tokens = number })
+        level_2        = object({ max_tokens = number })
+      }))
+      semantic_chunking_configuration = optional(object({
+        breakpoint_percentile_threshold = number
+        buffer_size                    = number
+        max_token                      = number
+      }))
+    })
+    custom_transformation_configuration = optional(object({
+      intermediate_storage    = string
+      transformation_function = string
+    }))
+  })
+  default = {
+    chunking_configuration = {
+      chunking_strategy                 = "FIXED_SIZE"
+      fixed_size_chunking_configuration = {
+        max_tokens        = 300
+        overlap_percentage = 20
+      }
+      hierarchical_chunking_configuration = null
+      semantic_chunking_configuration     = null
+    }
   }
 }
 
