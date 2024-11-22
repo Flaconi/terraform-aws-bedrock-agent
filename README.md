@@ -127,6 +127,54 @@ Type: `string`
 
 Default: `"RETAIN"`
 
+### <a name="input_vector_ingestion_configuration"></a> [vector\_ingestion\_configuration](#input\_vector\_ingestion\_configuration)
+
+Description: n/a
+
+Type:
+
+```hcl
+object({
+    chunking_configuration = object({
+      chunking_strategy = string
+      fixed_size_chunking_configuration = optional(object({
+        max_tokens         = number
+        overlap_percentage = optional(number)
+      }))
+      hierarchical_chunking_configuration = optional(object({
+        overlap_tokens = number
+        level_1        = object({ max_tokens = number })
+        level_2        = object({ max_tokens = number })
+      }))
+      semantic_chunking_configuration = optional(object({
+        breakpoint_percentile_threshold = number
+        buffer_size                     = number
+        max_token                       = number
+      }))
+    })
+    custom_transformation_configuration = optional(object({
+      intermediate_storage    = string
+      transformation_function = string
+    }))
+  })
+```
+
+Default:
+
+```json
+{
+  "chunking_configuration": {
+    "chunking_strategy": "FIXED_SIZE",
+    "fixed_size_chunking_configuration": {
+      "max_tokens": 300,
+      "overlap_percentage": 20
+    },
+    "hierarchical_chunking_configuration": null,
+    "semantic_chunking_configuration": null
+  }
+}
+```
+
 ### <a name="input_oss_additional_roles_arns"></a> [oss\_additional\_roles\_arns](#input\_oss\_additional\_roles\_arns)
 
 Description: Additional ARNs of roles to access OpenSearch
@@ -134,6 +182,318 @@ Description: Additional ARNs of roles to access OpenSearch
 Type: `list(string)`
 
 Default: `[]`
+
+### <a name="input_knowledge_base_response_generation_prompt_template"></a> [knowledge\_base\_response\_generation\_prompt\_template](#input\_knowledge\_base\_response\_generation\_prompt\_template)
+
+Description: Prompt template for pre-processing.
+
+Type: `string`
+
+Default: `"        You are a helpful assistant. Answer the following question using the context provided:\n        Question: {question}\n        Context: {context}\n        Your response should be thoughtful, detailed, and relevant to the provided context.\n"`
+
+### <a name="input_knowledge_base_response_generation_parser_mode"></a> [knowledge\_base\_response\_generation\_parser\_mode](#input\_knowledge\_base\_response\_generation\_parser\_mode)
+
+Description: Parser mode for pre-processing.
+
+Type: `string`
+
+Default: `"DEFAULT"`
+
+### <a name="input_knowledge_base_response_generation_prompt_creation_mode"></a> [knowledge\_base\_response\_generation\_prompt\_creation\_mode](#input\_knowledge\_base\_response\_generation\_prompt\_creation\_mode)
+
+Description: Prompt creation mode for pre-processing.
+
+Type: `string`
+
+Default: `"OVERRIDDEN"`
+
+### <a name="input_knowledge_base_response_generation_prompt_state"></a> [knowledge\_base\_response\_generation\_prompt\_state](#input\_knowledge\_base\_response\_generation\_prompt\_state)
+
+Description: Prompt state for pre-processing.
+
+Type: `string`
+
+Default: `"ENABLED"`
+
+### <a name="input_knowledge_base_response_generation_max_length"></a> [knowledge\_base\_response\_generation\_max\_length](#input\_knowledge\_base\_response\_generation\_max\_length)
+
+Description: Maximum number of tokens to allow in the generated response.
+
+Type: `number`
+
+Default: `512`
+
+### <a name="input_knowledge_base_response_generation_stop_sequences"></a> [knowledge\_base\_response\_generation\_stop\_sequences](#input\_knowledge\_base\_response\_generation\_stop\_sequences)
+
+Description: List of stop sequences that will stop generation.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "END"
+]
+```
+
+### <a name="input_knowledge_base_response_generation_temperature"></a> [knowledge\_base\_response\_generation\_temperature](#input\_knowledge\_base\_response\_generation\_temperature)
+
+Description: Likelihood of the model selecting higher-probability options while generating a response.
+
+Type: `number`
+
+Default: `0.7`
+
+### <a name="input_knowledge_base_response_generation_top_k"></a> [knowledge\_base\_response\_generation\_top\_k](#input\_knowledge\_base\_response\_generation\_top\_k)
+
+Description: Number of top most-likely candidates from which the model chooses the next token.
+
+Type: `number`
+
+Default: `50`
+
+### <a name="input_knowledge_base_response_generation_top_p"></a> [knowledge\_base\_response\_generation\_top\_p](#input\_knowledge\_base\_response\_generation\_top\_p)
+
+Description: Top percentage of the probability distribution of next tokens, from which the model chooses the next token.
+
+Type: `number`
+
+Default: `0.9`
+
+### <a name="input_pre_processing_prompt_template"></a> [pre\_processing\_prompt\_template](#input\_pre\_processing\_prompt\_template)
+
+Description: Prompt template for pre-processing.
+
+Type: `string`
+
+Default: `"        You are preparing the input. Extract relevant context and pre-process the following question:\n        Question: {question}\n        Context: {context}\n        Pre-processing should focus on extracting the core information.\n"`
+
+### <a name="input_pre_processing_parser_mode"></a> [pre\_processing\_parser\_mode](#input\_pre\_processing\_parser\_mode)
+
+Description: Parser mode for pre-processing.
+
+Type: `string`
+
+Default: `"DEFAULT"`
+
+### <a name="input_pre_processing_prompt_creation_mode"></a> [pre\_processing\_prompt\_creation\_mode](#input\_pre\_processing\_prompt\_creation\_mode)
+
+Description: Prompt creation mode for pre-processing.
+
+Type: `string`
+
+Default: `"OVERRIDDEN"`
+
+### <a name="input_pre_processing_prompt_state"></a> [pre\_processing\_prompt\_state](#input\_pre\_processing\_prompt\_state)
+
+Description: Prompt state for pre-processing.
+
+Type: `string`
+
+Default: `"ENABLED"`
+
+### <a name="input_pre_processing_max_length"></a> [pre\_processing\_max\_length](#input\_pre\_processing\_max\_length)
+
+Description: Maximum number of tokens to allow in the generated response.
+
+Type: `number`
+
+Default: `512`
+
+### <a name="input_pre_processing_stop_sequences"></a> [pre\_processing\_stop\_sequences](#input\_pre\_processing\_stop\_sequences)
+
+Description: List of stop sequences that will stop generation.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "END"
+]
+```
+
+### <a name="input_pre_processing_temperature"></a> [pre\_processing\_temperature](#input\_pre\_processing\_temperature)
+
+Description: Likelihood of the model selecting higher-probability options while generating a response.
+
+Type: `number`
+
+Default: `0.7`
+
+### <a name="input_pre_processing_top_k"></a> [pre\_processing\_top\_k](#input\_pre\_processing\_top\_k)
+
+Description: Number of top most-likely candidates from which the model chooses the next token.
+
+Type: `number`
+
+Default: `50`
+
+### <a name="input_pre_processing_top_p"></a> [pre\_processing\_top\_p](#input\_pre\_processing\_top\_p)
+
+Description: Top percentage of the probability distribution of next tokens, from which the model chooses the next token.
+
+Type: `number`
+
+Default: `0.9`
+
+### <a name="input_orchestration_prompt_template"></a> [orchestration\_prompt\_template](#input\_orchestration\_prompt\_template)
+
+Description: Prompt template for orchestration.
+
+Type: `string`
+
+Default: `"        You are orchestrating the flow of the agent. Based on the question and context, determine the next steps in the process:\n        Question: {question}\n        Context: {context}\n        Plan the next steps to follow the best strategy.\n"`
+
+### <a name="input_orchestration_parser_mode"></a> [orchestration\_parser\_mode](#input\_orchestration\_parser\_mode)
+
+Description: Parser mode for orchestration.
+
+Type: `string`
+
+Default: `"DEFAULT"`
+
+### <a name="input_orchestration_prompt_creation_mode"></a> [orchestration\_prompt\_creation\_mode](#input\_orchestration\_prompt\_creation\_mode)
+
+Description: Prompt creation mode for orchestration.
+
+Type: `string`
+
+Default: `"OVERRIDDEN"`
+
+### <a name="input_orchestration_prompt_state"></a> [orchestration\_prompt\_state](#input\_orchestration\_prompt\_state)
+
+Description: Prompt state for orchestration.
+
+Type: `string`
+
+Default: `"ENABLED"`
+
+### <a name="input_orchestration_max_length"></a> [orchestration\_max\_length](#input\_orchestration\_max\_length)
+
+Description: Maximum number of tokens to allow in the generated response.
+
+Type: `number`
+
+Default: `512`
+
+### <a name="input_orchestration_stop_sequences"></a> [orchestration\_stop\_sequences](#input\_orchestration\_stop\_sequences)
+
+Description: List of stop sequences that will stop generation.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "END"
+]
+```
+
+### <a name="input_orchestration_temperature"></a> [orchestration\_temperature](#input\_orchestration\_temperature)
+
+Description: Likelihood of the model selecting higher-probability options while generating a response.
+
+Type: `number`
+
+Default: `0.7`
+
+### <a name="input_orchestration_top_k"></a> [orchestration\_top\_k](#input\_orchestration\_top\_k)
+
+Description: Number of top most-likely candidates from which the model chooses the next token.
+
+Type: `number`
+
+Default: `50`
+
+### <a name="input_orchestration_top_p"></a> [orchestration\_top\_p](#input\_orchestration\_top\_p)
+
+Description: Top percentage of the probability distribution of next tokens, from which the model chooses the next token.
+
+Type: `number`
+
+Default: `0.9`
+
+### <a name="input_post_processing_prompt_template"></a> [post\_processing\_prompt\_template](#input\_post\_processing\_prompt\_template)
+
+Description: Prompt template for post-processing.
+
+Type: `string`
+
+Default: `"You are performing post-processing. Review the agent's output and refine the response for clarity and relevance:\nResponse: {response}\nContext: {context}\nEnsure the output is polished and aligns with the context.\n"`
+
+### <a name="input_post_processing_parser_mode"></a> [post\_processing\_parser\_mode](#input\_post\_processing\_parser\_mode)
+
+Description: Parser mode for post-processing.
+
+Type: `string`
+
+Default: `"DEFAULT"`
+
+### <a name="input_post_processing_prompt_creation_mode"></a> [post\_processing\_prompt\_creation\_mode](#input\_post\_processing\_prompt\_creation\_mode)
+
+Description: Prompt creation mode for post-processing.
+
+Type: `string`
+
+Default: `"OVERRIDDEN"`
+
+### <a name="input_post_processing_prompt_state"></a> [post\_processing\_prompt\_state](#input\_post\_processing\_prompt\_state)
+
+Description: Prompt state for post-processing.
+
+Type: `string`
+
+Default: `"DISABLED"`
+
+### <a name="input_post_processing_max_length"></a> [post\_processing\_max\_length](#input\_post\_processing\_max\_length)
+
+Description: Maximum number of tokens to allow in the generated response.
+
+Type: `number`
+
+Default: `512`
+
+### <a name="input_post_processing_stop_sequences"></a> [post\_processing\_stop\_sequences](#input\_post\_processing\_stop\_sequences)
+
+Description: List of stop sequences that will stop generation.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "END"
+]
+```
+
+### <a name="input_post_processing_temperature"></a> [post\_processing\_temperature](#input\_post\_processing\_temperature)
+
+Description: Likelihood of the model selecting higher-probability options while generating a response.
+
+Type: `number`
+
+Default: `0.7`
+
+### <a name="input_post_processing_top_k"></a> [post\_processing\_top\_k](#input\_post\_processing\_top\_k)
+
+Description: Number of top most-likely candidates from which the model chooses the next token.
+
+Type: `number`
+
+Default: `50`
+
+### <a name="input_post_processing_top_p"></a> [post\_processing\_top\_p](#input\_post\_processing\_top\_p)
+
+Description: Top percentage of the probability distribution of next tokens, from which the model chooses the next token.
+
+Type: `number`
+
+Default: `0.9`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 

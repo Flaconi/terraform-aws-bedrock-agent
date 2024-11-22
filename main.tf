@@ -219,6 +219,45 @@ resource "aws_bedrockagent_data_source" "this" {
       inclusion_prefixes      = var.s3_configuration.inclusion_prefixes
     }
   }
+
+  vector_ingestion_configuration {
+    chunking_configuration {
+      chunking_strategy = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy
+
+      dynamic "fixed_size_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "FIXED_SIZE" ? [1] : []
+        content {
+          max_tokens         = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.max_tokens
+          overlap_percentage = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.overlap_percentage
+        }
+      }
+
+      dynamic "hierarchical_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "HIERARCHICAL" ? [1] : []
+        content {
+          overlap_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.overlap_tokens
+
+          level_configuration {
+            max_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.level_1.max_tokens
+          }
+
+          level_configuration {
+            max_tokens = var.vector_ingestion_configuration.chunking_configuration.hierarchical_chunking_configuration.level_2.max_tokens
+          }
+        }
+      }
+
+      dynamic "semantic_chunking_configuration" {
+        for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "SEMANTIC" ? [1] : []
+        content {
+          breakpoint_percentile_threshold = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.breakpoint_percentile_threshold
+          buffer_size                     = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.buffer_size
+          max_token                       = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.max_token
+        }
+      }
+    }
+  }
+
   data_deletion_policy = var.knowledgebase_data_deletion_policy
 
   depends_on = [aws_iam_role_policy_attachment.knowledgebase]
@@ -230,6 +269,74 @@ resource "aws_bedrockagent_agent" "this" {
   idle_session_ttl_in_seconds = 500
   foundation_model            = var.agent_model_id
   instruction                 = var.agent_instructions
+
+  prompt_override_configuration {
+    prompt_configurations {
+      # KNOWLEDGE_BASE_RESPONSE_GENERATION step
+      base_prompt_template = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_prompt_template : null
+
+      inference_configuration {
+        max_length     = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_max_length : null
+        stop_sequences = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_stop_sequences : null
+        temperature    = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_temperature : null
+        top_k          = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_top_k : null
+        top_p          = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_top_p : null
+      }
+      parser_mode          = var.knowledge_base_response_generation_parser_mode
+      prompt_creation_mode = var.knowledge_base_response_generation_prompt_creation_mode
+      prompt_state         = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_prompt_state : null
+      prompt_type          = "KNOWLEDGE_BASE_RESPONSE_GENERATION"
+    }
+    # PRE_PROCESSING step
+    prompt_configurations {
+      base_prompt_template = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_prompt_template : null
+
+      inference_configuration {
+        max_length     = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_max_length : null
+        stop_sequences = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_stop_sequences : null
+        temperature    = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_temperature : null
+        top_k          = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_top_k : null
+        top_p          = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_top_p : null
+      }
+      parser_mode          = var.pre_processing_parser_mode
+      prompt_creation_mode = var.pre_processing_prompt_creation_mode
+      prompt_state         = var.pre_processing_prompt_creation_mode == "OVERRIDDEN" ? var.pre_processing_prompt_state : null
+      prompt_type          = "PRE_PROCESSING"
+    }
+    # ORCHESTRATION step
+    prompt_configurations {
+      base_prompt_template = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_prompt_template : null
+
+      inference_configuration {
+        max_length     = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_max_length : null
+        stop_sequences = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_stop_sequences : null
+        temperature    = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_temperature : null
+        top_k          = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_top_k : null
+        top_p          = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_top_p : null
+      }
+      parser_mode          = var.orchestration_parser_mode
+      prompt_creation_mode = var.orchestration_prompt_creation_mode
+      prompt_state         = var.orchestration_prompt_creation_mode == "OVERRIDDEN" ? var.orchestration_prompt_state : null
+      prompt_type          = "ORCHESTRATION"
+    }
+    # POST_PROCESSING step
+    prompt_configurations {
+      base_prompt_template = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_prompt_template : null
+
+      inference_configuration {
+        max_length     = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_max_length : null
+        stop_sequences = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_stop_sequences : null
+        temperature    = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_temperature : null
+        top_k          = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_top_k : null
+        top_p          = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_top_p : null
+      }
+
+      parser_mode          = var.post_processing_parser_mode
+      prompt_creation_mode = var.post_processing_prompt_creation_mode
+      prompt_state         = var.post_processing_prompt_creation_mode == "OVERRIDDEN" ? var.post_processing_prompt_state : null
+      prompt_type          = "POST_PROCESSING"
+    }
+  }
 
   depends_on = [
     aws_bedrockagent_knowledge_base.this
