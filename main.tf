@@ -227,7 +227,7 @@ resource "aws_bedrockagent_data_source" "this" {
       dynamic "fixed_size_chunking_configuration" {
         for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "FIXED_SIZE" ? [1] : []
         content {
-          max_tokens        = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.max_tokens
+          max_tokens         = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.max_tokens
           overlap_percentage = var.vector_ingestion_configuration.chunking_configuration.fixed_size_chunking_configuration.overlap_percentage
         }
       }
@@ -251,8 +251,8 @@ resource "aws_bedrockagent_data_source" "this" {
         for_each = var.vector_ingestion_configuration.chunking_configuration.chunking_strategy == "SEMANTIC" ? [1] : []
         content {
           breakpoint_percentile_threshold = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.breakpoint_percentile_threshold
-          buffer_size                    = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.buffer_size
-          max_token                      = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.max_token
+          buffer_size                     = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.buffer_size
+          max_token                       = var.vector_ingestion_configuration.chunking_configuration.semantic_chunking_configuration.max_token
         }
       }
     }
@@ -272,7 +272,7 @@ resource "aws_bedrockagent_agent" "this" {
 
   prompt_override_configuration {
     prompt_configurations {
-    # KNOWLEDGE_BASE_RESPONSE_GENERATION step
+      # KNOWLEDGE_BASE_RESPONSE_GENERATION step
       base_prompt_template = var.knowledge_base_response_generation_prompt_creation_mode == "OVERRIDDEN" ? var.knowledge_base_response_generation_prompt_template : null
 
       inference_configuration {

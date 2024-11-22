@@ -65,7 +65,7 @@ variable "vector_ingestion_configuration" {
     chunking_configuration = object({
       chunking_strategy = string
       fixed_size_chunking_configuration = optional(object({
-        max_tokens        = number
+        max_tokens         = number
         overlap_percentage = optional(number)
       }))
       hierarchical_chunking_configuration = optional(object({
@@ -75,8 +75,8 @@ variable "vector_ingestion_configuration" {
       }))
       semantic_chunking_configuration = optional(object({
         breakpoint_percentile_threshold = number
-        buffer_size                    = number
-        max_token                      = number
+        buffer_size                     = number
+        max_token                       = number
       }))
     })
     custom_transformation_configuration = optional(object({
@@ -86,9 +86,9 @@ variable "vector_ingestion_configuration" {
   })
   default = {
     chunking_configuration = {
-      chunking_strategy                 = "FIXED_SIZE"
+      chunking_strategy = "FIXED_SIZE"
       fixed_size_chunking_configuration = {
-        max_tokens        = 300
+        max_tokens         = 300
         overlap_percentage = 20
       }
       hierarchical_chunking_configuration = null
@@ -112,7 +112,7 @@ variable "oss_additional_roles_arns" {
 variable "knowledge_base_response_generation_prompt_template" {
   description = "Prompt template for pre-processing."
   type        = string
-  default = <<EOF
+  default     = <<EOF
         You are a helpful assistant. Answer the following question using the context provided:
         Question: {question}
         Context: {context}
