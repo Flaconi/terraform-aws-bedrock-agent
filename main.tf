@@ -365,5 +365,9 @@ resource "aws_bedrockagent_agent_alias" "this" {
   agent_id         = aws_bedrockagent_agent.this.agent_id
   description      = var.alias_description
 
+  routing_configuration {
+    agent_version = aws_bedrockagent_agent.this.agent_version
+  }
+
   depends_on = [aws_bedrockagent_agent_knowledge_base_association.this]
 }
