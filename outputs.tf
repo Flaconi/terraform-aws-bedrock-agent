@@ -15,5 +15,12 @@ output "agent" {
 
 output "agent_alias" {
   description = "Information about created Bedrock Agent Alias"
-  value       = aws_bedrockagent_agent_alias.this
+  value = {
+    id               = aws_bedrockagent_agent_alias.this.id
+    agent_id         = aws_bedrockagent_agent_alias.this.agent_id
+    description      = aws_bedrockagent_agent_alias.this.description
+    agent_alias_arn  = aws_bedrockagent_agent_alias.this.agent_alias_arn
+    agent_alias_id   = aws_bedrockagent_agent_alias.this.agent_alias_id
+    agent_alias_name = aws_bedrockagent_agent_alias.this.agent_alias_name
+  }
 }
