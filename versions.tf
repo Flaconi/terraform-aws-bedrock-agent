@@ -3,15 +3,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.73"
+      version = "~> 5.94"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
-      version = "~> 2.2"
+      version = "~> 2.3"
     }
     time = {
       source  = "hashicorp/time"
-      version = "~> 0.12"
+      version = "~> 0.13"
     }
   }
 }

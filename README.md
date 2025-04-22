@@ -18,9 +18,9 @@ Terraform module for Amazon Bedrock Agent resources
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.73 |
-| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | ~> 2.2 |
-| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.12 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.94 |
+| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | ~> 2.3 |
+| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.13 |
 
 <!-- TFDOCS_PROVIDER_END -->
 
@@ -30,9 +30,9 @@ Terraform module for Amazon Bedrock Agent resources
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.73 |
-| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | ~> 2.2 |
-| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.94 |
+| <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | ~> 2.3 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.13 |
 
 <!-- TFDOCS_REQUIREMENTS_END -->
 

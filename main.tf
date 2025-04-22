@@ -369,5 +369,9 @@ resource "aws_bedrockagent_agent_alias" "this" {
     agent_version = aws_bedrockagent_agent.this.agent_version
   }
 
+  lifecycle {
+    ignore_changes = [routing_configuration]
+  }
+
   depends_on = [aws_bedrockagent_agent_knowledge_base_association.this]
 }
