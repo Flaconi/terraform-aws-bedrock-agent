@@ -347,6 +347,67 @@ variable "post_processing_top_p" {
   type        = number
   default     = 0.9
 }
+variable "guardrail_id" {
+  description = "Optional ID of an existing Guardrail to use."
+  type        = string
+  default     = null
+}
+
+variable "guardrail_version" {
+  description = "Optional version of the existing Guardrail to use."
+  type        = string
+  default     = null
+}
+
+variable "guardrail_config" {
+  description = "Optional full Guardrail configuration. If set, the module creates a Guardrail and version."
+  type = object({
+    description               = optional(string)
+    blocked_input_messaging   = optional(string)
+    blocked_outputs_messaging = optional(string)
+
+    content_policy_config = optional(object({
+      filters_config = list(object({
+        type            = string
+        input_strength  = string
+        output_strength = string
+      }))
+    }))
+
+    sensitive_information_policy_config = optional(object({
+      pii_entities_config = optional(list(object({
+        type   = string
+        action = string
+      })))
+      regexes_config = optional(list(object({
+        name        = string
+        description = string
+        pattern     = string
+        action      = string
+      })))
+    }))
+
+    topic_policy_config = optional(object({
+      topics_config = list(object({
+        name       = string
+        examples   = list(string)
+        type       = string
+        definition = string
+      }))
+    }))
+
+    word_policy_config = optional(object({
+      managed_word_lists_config = optional(list(object({
+        type = string
+      })))
+      words_config = optional(list(object({
+        text = string
+      })))
+    }))
+  })
+  default = null
+}
+
 
 variable "tags" {
   description = "A map of tags to assign to the customization job and custom model."

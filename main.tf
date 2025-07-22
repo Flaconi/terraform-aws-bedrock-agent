@@ -338,6 +338,14 @@ resource "aws_bedrockagent_agent" "this" {
     }
   }
 
+  dynamic "guardrail_configuration" {
+    for_each = var.guardrail_config != null ? [1] : (var.guardrail_id != null ? [1] : [])
+    content {
+      guardrail_identifier = var.guardrail_config != null ? aws_bedrock_guardrail.this[0].guardrail_id : var.guardrail_id
+      guardrail_version    = var.guardrail_config != null ? aws_bedrock_guardrail_version.this[0].version : var.guardrail_version
+    }
+  }
+
   depends_on = [
     aws_bedrockagent_knowledge_base.this
   ]
@@ -374,4 +382,88 @@ resource "aws_bedrockagent_agent_alias" "this" {
   }
 
   depends_on = [aws_bedrockagent_agent_knowledge_base_association.this]
+}
+
+resource "aws_bedrock_guardrail" "this" {
+  count = var.guardrail_config != null ? 1 : 0
+
+  name                      = "${var.name}-guardrail"
+  description               = coalesce(var.guardrail_config.description, "Guardrail for ${var.name}")
+  blocked_input_messaging   = coalesce(var.guardrail_config.blocked_input_messaging, "Input blocked")
+  blocked_outputs_messaging = coalesce(var.guardrail_config.blocked_outputs_messaging, "Output blocked")
+
+  dynamic "content_policy_config" {
+    for_each = var.guardrail_config.content_policy_config != null ? [1] : []
+    content {
+      dynamic "filters_config" {
+        for_each = var.guardrail_config.content_policy_config.filters_config
+        content {
+          type            = filters_config.value.type
+          input_strength  = filters_config.value.input_strength
+          output_strength = filters_config.value.output_strength
+        }
+      }
+    }
+  }
+
+  dynamic "sensitive_information_policy_config" {
+    for_each = var.guardrail_config.sensitive_information_policy_config != null ? [1] : []
+    content {
+      dynamic "pii_entities_config" {
+        for_each = var.guardrail_config.sensitive_information_policy_config.pii_entities_config != null ? var.guardrail_config.sensitive_information_policy_config.pii_entities_config : []
+        content {
+          type   = pii_entities_config.value.type
+          action = pii_entities_config.value.action
+        }
+      }
+      dynamic "regexes_config" {
+        for_each = var.guardrail_config.sensitive_information_policy_config.regexes_config != null ? var.guardrail_config.sensitive_information_policy_config.regexes_config : []
+        content {
+          name        = regexes_config.value.name
+          description = regexes_config.value.description
+          pattern     = regexes_config.value.pattern
+          action      = regexes_config.value.action
+        }
+      }
+    }
+  }
+
+  dynamic "topic_policy_config" {
+    for_each = var.guardrail_config.topic_policy_config != null ? [1] : []
+    content {
+      dynamic "topics_config" {
+        for_each = var.guardrail_config.topic_policy_config.topics_config
+        content {
+          name       = topics_config.value.name
+          examples   = topics_config.value.examples
+          type       = topics_config.value.type
+          definition = topics_config.value.definition
+        }
+      }
+    }
+  }
+
+  dynamic "word_policy_config" {
+    for_each = var.guardrail_config.word_policy_config != null ? [1] : []
+    content {
+      dynamic "managed_word_lists_config" {
+        for_each = var.guardrail_config.word_policy_config.managed_word_lists_config != null ? var.guardrail_config.word_policy_config.managed_word_lists_config : []
+        content {
+          type = managed_word_lists_config.value.type
+        }
+      }
+      dynamic "words_config" {
+        for_each = var.guardrail_config.word_policy_config.words_config != null ? var.guardrail_config.word_policy_config.words_config : []
+        content {
+          text = words_config.value.text
+        }
+      }
+    }
+  }
+}
+
+resource "aws_bedrock_guardrail_version" "this" {
+  count         = var.guardrail_config != null ? 1 : 0
+  guardrail_arn = aws_bedrock_guardrail.this[0].guardrail_arn
+  description   = "Version for ${var.name}-guardrail"
 }
