@@ -495,6 +495,77 @@ Type: `number`
 
 Default: `0.9`
 
+### <a name="input_guardrail_id"></a> [guardrail\_id](#input\_guardrail\_id)
+
+Description: Optional ID of an existing Guardrail to use.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_guardrail_version"></a> [guardrail\_version](#input\_guardrail\_version)
+
+Description: Optional version of the existing Guardrail to use.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_guardrail_config"></a> [guardrail\_config](#input\_guardrail\_config)
+
+Description: Optional full Guardrail configuration. If set, the module creates a Guardrail and version.
+
+Type:
+
+```hcl
+object({
+    description               = optional(string)
+    blocked_input_messaging   = optional(string)
+    blocked_outputs_messaging = optional(string)
+
+    content_policy_config = optional(object({
+      filters_config = list(object({
+        type            = string
+        input_strength  = string
+        output_strength = string
+      }))
+    }))
+
+    sensitive_information_policy_config = optional(object({
+      pii_entities_config = optional(list(object({
+        type   = string
+        action = string
+      })))
+      regexes_config = optional(list(object({
+        name        = string
+        description = string
+        pattern     = string
+        action      = string
+      })))
+    }))
+
+    topic_policy_config = optional(object({
+      topics_config = list(object({
+        name       = string
+        examples   = list(string)
+        type       = string
+        definition = string
+      }))
+    }))
+
+    word_policy_config = optional(object({
+      managed_word_lists_config = optional(list(object({
+        type = string
+      })))
+      words_config = optional(list(object({
+        text = string
+      })))
+    }))
+  })
+```
+
+Default: `null`
+
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
 Description: A map of tags to assign to the customization job and custom model.
@@ -512,6 +583,8 @@ Default: `{}`
 |------|-------------|
 | <a name="output_agent"></a> [agent](#output\_agent) | Information about created Bedrock Agent |
 | <a name="output_agent_alias"></a> [agent\_alias](#output\_agent\_alias) | Information about created Bedrock Agent Alias |
+| <a name="output_guardrail_id"></a> [guardrail\_id](#output\_guardrail\_id) | ID of the created Guardrail |
+| <a name="output_guardrail_version"></a> [guardrail\_version](#output\_guardrail\_version) | Version of the created Guardrail |
 | <a name="output_knowledge_base"></a> [knowledge\_base](#output\_knowledge\_base) | Information about created Bedrock Knowledgebase |
 | <a name="output_oss_collection"></a> [oss\_collection](#output\_oss\_collection) | Information about created OpenSearch Serverless collection |
 

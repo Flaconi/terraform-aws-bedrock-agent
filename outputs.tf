@@ -24,3 +24,13 @@ output "agent_alias" {
     agent_alias_name = aws_bedrockagent_agent_alias.this.agent_alias_name
   }
 }
+
+output "guardrail_id" {
+  description = "ID of the created Guardrail"
+  value       = var.guardrail_config != null ? aws_bedrock_guardrail.this[0].guardrail_id : null
+}
+
+output "guardrail_version" {
+  description = "Version of the created Guardrail"
+  value       = var.guardrail_config != null ? aws_bedrock_guardrail_version.this[0].version : null
+}
