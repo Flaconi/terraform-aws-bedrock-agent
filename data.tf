@@ -36,7 +36,10 @@ data "aws_iam_policy_document" "agent_trust" {
 
 data "aws_iam_policy_document" "agent_permissions" {
   statement {
-    actions = ["bedrock:InvokeModel"]
+    actions = [
+      "bedrock:InvokeModel",
+      "bedrock:InvokeModelWithResponseStream"
+    ]
     resources = [
       data.aws_bedrock_foundation_model.agent.model_arn,
     ]
