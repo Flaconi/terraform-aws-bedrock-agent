@@ -28,7 +28,7 @@ data "aws_iam_policy_document" "agent_trust" {
     }
     condition {
       test     = "ArnLike"
-      values   = ["arn:aws:bedrock:${data.aws_region.this.name}:${data.aws_caller_identity.this.account_id}:agent/*"]
+      values   = ["arn:aws:bedrock:${data.aws_region.this.region}:${data.aws_caller_identity.this.account_id}:agent/*"]
       variable = "AWS:SourceArn"
     }
   }
@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "knowledgebase_trust" {
     }
     condition {
       test     = "ArnLike"
-      values   = ["arn:aws:bedrock:${data.aws_region.this.name}:${data.aws_caller_identity.this.account_id}:knowledge-base/*"]
+      values   = ["arn:aws:bedrock:${data.aws_region.this.region}:${data.aws_caller_identity.this.account_id}:knowledge-base/*"]
       variable = "AWS:SourceArn"
     }
   }
