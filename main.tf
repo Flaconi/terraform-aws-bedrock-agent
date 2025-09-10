@@ -186,7 +186,7 @@ resource "aws_bedrockagent_knowledge_base" "this" {
   role_arn = aws_iam_role.knowledgebase.arn
   knowledge_base_configuration {
     vector_knowledge_base_configuration {
-      embedding_model_arn = data.aws_bedrock_foundation_model.knowledgebase.model_arn
+      embedding_model_arn = data.aws_bedrock_foundation_model.knowledgebase[var.knowledgebase_embedding_model_id].model_arn
     }
     type = "VECTOR"
   }

@@ -114,11 +114,27 @@ Default: `"anthropic.claude-v2"`
 
 ### <a name="input_knowledgebase_model_id"></a> [knowledgebase\_model\_id](#input\_knowledgebase\_model\_id)
 
-Description: Model identifier for Knowledgebase.
+Description: Model identifier for Knowledgebase. (Deprecated) Use `knowledgebase_embedding_model_id` instead.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_knowledgebase_embedding_model_id"></a> [knowledgebase\_embedding\_model\_id](#input\_knowledgebase\_embedding\_model\_id)
+
+Description: Embedding Model identifier for Knowledgebase.
 
 Type: `string`
 
 Default: `"amazon.titan-embed-text-v1"`
+
+### <a name="input_knowledgebase_access_model_ids"></a> [knowledgebase\_access\_model\_ids](#input\_knowledgebase\_access\_model\_ids)
+
+Description: Model identifiers for Knowledgebase to have access to. This permissions would be added in addition to embedded model.
+
+Type: `list(string)`
+
+Default: `[]`
 
 ### <a name="input_knowledgebase_data_deletion_policy"></a> [knowledgebase\_data\_deletion\_policy](#input\_knowledgebase\_data\_deletion\_policy)
 
