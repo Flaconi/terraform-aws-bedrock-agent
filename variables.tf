@@ -36,9 +36,21 @@ variable "knowledgebase_description" {
 }
 
 variable "knowledgebase_model_id" {
-  description = "Model identifier for Knowledgebase."
+  description = "Model identifier for Knowledgebase. (Deprecated) Use `knowledgebase_embedding_model_id` instead."
+  type        = string
+  default     = null
+}
+
+variable "knowledgebase_embedding_model_id" {
+  description = "Embedding Model identifier for Knowledgebase."
   type        = string
   default     = "amazon.titan-embed-text-v1"
+}
+
+variable "knowledgebase_access_model_ids" {
+  description = "Model identifiers for Knowledgebase to have access to. This permissions would be added in addition to embedded model."
+  type        = list(string)
+  default     = []
 }
 
 variable "knowledgebase_data_deletion_policy" {

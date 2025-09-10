@@ -11,7 +11,9 @@ data "aws_bedrock_foundation_model" "agent" {
 }
 
 data "aws_bedrock_foundation_model" "knowledgebase" {
-  model_id = var.knowledgebase_model_id
+  for_each = local.knowledgebase_access_model_ids
+
+  model_id = each.value
 }
 
 data "aws_iam_policy_document" "agent_trust" {
@@ -75,8 +77,8 @@ data "aws_iam_policy_document" "knowledgebase_trust" {
 data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
     actions = ["bedrock:InvokeModel"]
-    resources = [
-      data.aws_bedrock_foundation_model.knowledgebase.model_arn,
+    resources = [for id in local.knowledgebase_access_model_ids :
+      data.aws_bedrock_foundation_model.knowledgebase[id].model_arn
     ]
   }
   statement {
