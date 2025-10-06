@@ -139,31 +139,14 @@ resource "time_sleep" "wait_before_index_creation" {
 }
 
 resource "opensearch_index" "default_oss_index" {
-  name                           = "bedrock-knowledge-base-default-index"
-  number_of_shards               = "2"
-  number_of_replicas             = "0"
-  index_knn                      = true
-  index_knn_algo_param_ef_search = "512"
-  mappings                       = <<-EOF
-    {
-      "properties": {
-        "bedrock-knowledge-base-default-vector": {
-          "type": "knn_vector",
-          "dimension": 1536,
-          "method": {
-            "name": "hnsw",
-            "engine": "faiss",
-            "parameters": {
-              "m": 16,
-              "ef_construction": 512
-            },
-            "space_type": "l2"
-          }
-        }
-      }
-    }
-  EOF
+  name                           = var.opensearch_index_name
+  number_of_shards               = var.opensearch_number_of_shards
+  number_of_replicas             = var.opensearch_number_of_replicas
+  index_knn                      = var.opensearch_index_knn
+  index_knn_algo_param_ef_search = var.opensearch_index_knn_algo_param_ef_search
+  mappings                       = jsonencode(var.opensearch_index_mappings)
   force_destroy                  = true
+
   depends_on = [
     time_sleep.wait_before_index_creation,
     aws_opensearchserverless_access_policy.data_policy,
