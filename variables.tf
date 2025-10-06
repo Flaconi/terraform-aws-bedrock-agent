@@ -359,6 +359,74 @@ variable "post_processing_top_p" {
   type        = number
   default     = 0.9
 }
+
+# OpenSearch Index Configuration
+#
+# IMPORTANT: Ensure your mappings are compatible with the embedding model
+# used by the Bedrock Knowledge Base or RAG application.
+
+variable "opensearch_index_name" {
+  description = "Name of the OpenSearch index"
+  type        = string
+  default     = "bedrock-knowledge-base-default-index"
+}
+
+variable "opensearch_number_of_shards" {
+  description = "Number of primary shards for the OpenSearch index"
+  type        = string
+  default     = "2"
+}
+
+variable "opensearch_number_of_replicas" {
+  description = "Number of replica shards for the OpenSearch index"
+  type        = string
+  default     = "0"
+}
+
+variable "opensearch_index_knn" {
+  description = "Enable k-NN indexing for the OpenSearch index"
+  type        = bool
+  default     = true
+}
+
+variable "opensearch_index_knn_algo_param_ef_search" {
+  description = "ef_search parameter used by the k-NN algorithm"
+  type        = string
+  default     = "512"
+}
+variable "opensearch_index_mappings" {
+  description = "The structured OpenSearch index mapping"
+  type = object({
+    properties = map(object({
+      type      = string
+      dimension = optional(number)
+      method = optional(object({
+        name       = string
+        engine     = string
+        space_type = string
+        parameters = optional(map(number))
+      }))
+    }))
+  })
+  default = {
+    properties = {
+      "bedrock-knowledge-base-default-vector" = {
+        type      = "knn_vector"
+        dimension = 1536
+        method = {
+          name       = "hnsw"
+          engine     = "faiss"
+          space_type = "l2"
+          parameters = {
+            m               = 16
+            ef_construction = 512
+          }
+        }
+      }
+    }
+  }
+}
+
 variable "guardrail_id" {
   description = "Optional ID of an existing Guardrail to use."
   type        = string
