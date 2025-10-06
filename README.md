@@ -512,6 +512,89 @@ Type: `number`
 
 Default: `0.9`
 
+### <a name="input_opensearch_index_name"></a> [opensearch\_index\_name](#input\_opensearch\_index\_name)
+
+Description: Name of the OpenSearch index
+
+Type: `string`
+
+Default: `"bedrock-knowledge-base-default-index"`
+
+### <a name="input_opensearch_number_of_shards"></a> [opensearch\_number\_of\_shards](#input\_opensearch\_number\_of\_shards)
+
+Description: Number of primary shards for the OpenSearch index
+
+Type: `string`
+
+Default: `"2"`
+
+### <a name="input_opensearch_number_of_replicas"></a> [opensearch\_number\_of\_replicas](#input\_opensearch\_number\_of\_replicas)
+
+Description: Number of replica shards for the OpenSearch index
+
+Type: `string`
+
+Default: `"0"`
+
+### <a name="input_opensearch_index_knn"></a> [opensearch\_index\_knn](#input\_opensearch\_index\_knn)
+
+Description: Enable k-NN indexing for the OpenSearch index
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_opensearch_index_knn_algo_param_ef_search"></a> [opensearch\_index\_knn\_algo\_param\_ef\_search](#input\_opensearch\_index\_knn\_algo\_param\_ef\_search)
+
+Description: ef\_search parameter used by the k-NN algorithm
+
+Type: `string`
+
+Default: `"512"`
+
+### <a name="input_opensearch_index_mappings"></a> [opensearch\_index\_mappings](#input\_opensearch\_index\_mappings)
+
+Description: The structured OpenSearch index mapping
+
+Type:
+
+```hcl
+object({
+    properties = map(object({
+      type      = string
+      dimension = optional(number)
+      method = optional(object({
+        name       = string
+        engine     = string
+        space_type = string
+        parameters = optional(map(number))
+      }))
+    }))
+  })
+```
+
+Default:
+
+```json
+{
+  "properties": {
+    "bedrock-knowledge-base-default-vector": {
+      "dimension": 1536,
+      "method": {
+        "engine": "faiss",
+        "name": "hnsw",
+        "parameters": {
+          "ef_construction": 512,
+          "m": 16
+        },
+        "space_type": "l2"
+      },
+      "type": "knn_vector"
+    }
+  }
+}
+```
+
 ### <a name="input_guardrail_id"></a> [guardrail\_id](#input\_guardrail\_id)
 
 Description: Optional ID of an existing Guardrail to use.
