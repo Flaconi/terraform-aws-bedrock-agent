@@ -78,7 +78,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
     actions = [
       "bedrock:InvokeModel",
-      "bedrock:rerank"
+      "bedrock:Rerank"
     ]
     resources = [for id in local.knowledgebase_access_model_ids :
       data.aws_bedrock_foundation_model.knowledgebase[id].model_arn
