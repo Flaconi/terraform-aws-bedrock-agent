@@ -666,6 +666,50 @@ object({
 
 Default: `null`
 
+### <a name="input_additional_agent_policy_statements"></a> [additional\_agent\_policy\_statements](#input\_additional\_agent\_policy\_statements)
+
+Description: Optional additional IAM policy statements for the Bedrock agent role
+
+Type:
+
+```hcl
+list(object({
+    sid       = optional(string)
+    actions   = list(string)
+    resources = list(string)
+    effect    = optional(string, "Allow")
+    condition = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  }))
+```
+
+Default: `[]`
+
+### <a name="input_additional_knowledgebase_policy_statements"></a> [additional\_knowledgebase\_policy\_statements](#input\_additional\_knowledgebase\_policy\_statements)
+
+Description: Optional additional IAM policy statements for the Bedrock knowledge base role
+
+Type:
+
+```hcl
+list(object({
+    sid       = optional(string)
+    actions   = list(string)
+    resources = list(string)
+    effect    = optional(string, "Allow")
+    condition = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  }))
+```
+
+Default: `[]`
+
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
 Description: A map of tags to assign to the customization job and custom model.

@@ -18,6 +18,7 @@ data "aws_bedrock_foundation_model" "knowledgebase" {
 
 data "aws_iam_policy_document" "agent_trust" {
   statement {
+    sid     = "AllowBedrockAgentAssumeRole"
     actions = ["sts:AssumeRole"]
     principals {
       identifiers = ["bedrock.amazonaws.com"]
@@ -38,6 +39,7 @@ data "aws_iam_policy_document" "agent_trust" {
 
 data "aws_iam_policy_document" "agent_permissions" {
   statement {
+    sid = "AllowInvokeModelAndStream"
     actions = [
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream"
@@ -47,15 +49,36 @@ data "aws_iam_policy_document" "agent_permissions" {
     ]
   }
   statement {
+    sid     = "AllowRetrieveFromKnowledgeBase"
     actions = ["bedrock:Retrieve"]
     resources = [
       aws_bedrockagent_knowledge_base.this.arn
     ]
   }
+
+  dynamic "statement" {
+    for_each = var.additional_agent_policy_statements
+    content {
+      sid       = try(statement.value.sid, null)
+      effect    = try(statement.value.effect, "Allow")
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      dynamic "condition" {
+        for_each = statement.value.condition != null ? statement.value.condition : []
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "knowledgebase_trust" {
   statement {
+    sid     = "AllowBedrockKnowledgeBaseAssumeRole"
     actions = ["sts:AssumeRole"]
     principals {
       identifiers = ["bedrock.amazonaws.com"]
@@ -76,21 +99,30 @@ data "aws_iam_policy_document" "knowledgebase_trust" {
 
 data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
+    sid = "AllowInvokeModel"
     actions = [
-      "bedrock:InvokeModel",
-      "bedrock:Rerank"
+      "bedrock:InvokeModel"
     ]
     resources = [for id in local.knowledgebase_access_model_ids :
       data.aws_bedrock_foundation_model.knowledgebase[id].model_arn
     ]
   }
   statement {
+    sid = "AllowRerank"
+    actions = [
+      "bedrock:Rerank"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid     = "AllowOpenSearchAccess"
     actions = ["aoss:APIAccessAll"]
     resources = [
       aws_opensearchserverless_collection.this.arn
     ]
   }
   statement {
+    sid     = "AllowS3ListBucket"
     actions = ["s3:ListBucket"]
     resources = [
       var.s3_configuration.bucket_arn
@@ -102,6 +134,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
     }
   }
   statement {
+    sid     = "AllowS3GetObject"
     actions = ["s3:GetObject"]
     resources = var.s3_configuration.inclusion_prefixes == null ? [
       "${var.s3_configuration.bucket_arn}/*"
@@ -112,6 +145,25 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
       test     = "StringEquals"
       values   = [data.aws_caller_identity.this.account_id]
       variable = "aws:ResourceAccount"
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.additional_knowledgebase_policy_statements
+    content {
+      sid       = try(statement.value.sid, null)
+      effect    = try(statement.value.effect, "Allow")
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      dynamic "condition" {
+        for_each = statement.value.condition != null ? statement.value.condition : []
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
     }
   }
 }

@@ -487,7 +487,37 @@ variable "guardrail_config" {
   })
   default = null
 }
+variable "additional_agent_policy_statements" {
+  description = "Optional additional IAM policy statements for the Bedrock agent role"
+  type = list(object({
+    sid       = optional(string)
+    actions   = list(string)
+    resources = list(string)
+    effect    = optional(string, "Allow")
+    condition = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  }))
+  default = []
+}
 
+variable "additional_knowledgebase_policy_statements" {
+  description = "Optional additional IAM policy statements for the Bedrock knowledge base role"
+  type = list(object({
+    sid       = optional(string)
+    actions   = list(string)
+    resources = list(string)
+    effect    = optional(string, "Allow")
+    condition = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })))
+  }))
+  default = []
+}
 
 variable "tags" {
   description = "A map of tags to assign to the customization job and custom model."
