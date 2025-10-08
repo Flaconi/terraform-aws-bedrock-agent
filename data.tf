@@ -55,6 +55,25 @@ data "aws_iam_policy_document" "agent_permissions" {
       aws_bedrockagent_knowledge_base.this.arn
     ]
   }
+
+  dynamic "statement" {
+    for_each = var.additional_agent_policy_statements
+    content {
+      sid       = try(statement.value.sid, null)
+      effect    = try(statement.value.effect, "Allow")
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      dynamic "condition" {
+        for_each = statement.value.condition != null ? statement.value.condition : []
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "knowledgebase_trust" {
@@ -126,6 +145,25 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
       test     = "StringEquals"
       values   = [data.aws_caller_identity.this.account_id]
       variable = "aws:ResourceAccount"
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.additional_knowledgebase_policy_statements
+    content {
+      sid       = try(statement.value.sid, null)
+      effect    = try(statement.value.effect, "Allow")
+      actions   = statement.value.actions
+      resources = statement.value.resources
+
+      dynamic "condition" {
+        for_each = statement.value.condition != null ? statement.value.condition : []
+        content {
+          test     = condition.value.test
+          variable = condition.value.variable
+          values   = condition.value.values
+        }
+      }
     }
   }
 }
