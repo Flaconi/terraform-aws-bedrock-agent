@@ -18,6 +18,7 @@ data "aws_bedrock_foundation_model" "knowledgebase" {
 
 data "aws_iam_policy_document" "agent_trust" {
   statement {
+    sid     = "AllowBedrockAgentAssumeRole"
     actions = ["sts:AssumeRole"]
     principals {
       identifiers = ["bedrock.amazonaws.com"]
@@ -38,6 +39,7 @@ data "aws_iam_policy_document" "agent_trust" {
 
 data "aws_iam_policy_document" "agent_permissions" {
   statement {
+    sid     = "AllowInvokeModelAndStream"
     actions = [
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream"
@@ -47,6 +49,7 @@ data "aws_iam_policy_document" "agent_permissions" {
     ]
   }
   statement {
+    sid     = "AllowRetrieveFromKnowledgeBase"
     actions = ["bedrock:Retrieve"]
     resources = [
       aws_bedrockagent_knowledge_base.this.arn
@@ -56,6 +59,7 @@ data "aws_iam_policy_document" "agent_permissions" {
 
 data "aws_iam_policy_document" "knowledgebase_trust" {
   statement {
+    sid     = "AllowBedrockKnowledgeBaseAssumeRole"
     actions = ["sts:AssumeRole"]
     principals {
       identifiers = ["bedrock.amazonaws.com"]
@@ -76,6 +80,7 @@ data "aws_iam_policy_document" "knowledgebase_trust" {
 
 data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
+    sid     = "AllowInvokeModel"
     actions = [
       "bedrock:InvokeModel"
     ]
@@ -91,12 +96,14 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
     resources = ["*"]
   }
   statement {
+    sid     = "AllowOpenSearchAccess"
     actions = ["aoss:APIAccessAll"]
     resources = [
       aws_opensearchserverless_collection.this.arn
     ]
   }
   statement {
+    sid     = "AllowS3ListBucket"
     actions = ["s3:ListBucket"]
     resources = [
       var.s3_configuration.bucket_arn
@@ -108,6 +115,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
     }
   }
   statement {
+    sid     = "AllowS3GetObject"
     actions = ["s3:GetObject"]
     resources = var.s3_configuration.inclusion_prefixes == null ? [
       "${var.s3_configuration.bucket_arn}/*"
