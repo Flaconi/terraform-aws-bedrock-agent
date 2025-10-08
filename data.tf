@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "agent_trust" {
 
 data "aws_iam_policy_document" "agent_permissions" {
   statement {
-    sid     = "AllowInvokeModelAndStream"
+    sid = "AllowInvokeModelAndStream"
     actions = [
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream"
@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "knowledgebase_trust" {
 
 data "aws_iam_policy_document" "knowledgebase_permissions" {
   statement {
-    sid     = "AllowInvokeModel"
+    sid = "AllowInvokeModel"
     actions = [
       "bedrock:InvokeModel"
     ]
@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "knowledgebase_permissions" {
     ]
   }
   statement {
-    sid     = "AllowRerank"
+    sid = "AllowRerank"
     actions = [
       "bedrock:Rerank"
     ]
