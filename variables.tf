@@ -29,6 +29,11 @@ variable "agent_idle_session_ttl" {
   description = "Number of seconds for which Amazon Bedrock keeps information about a user's conversation with the agent. A user interaction remains active for the amount of time specified."
   type        = number
   default     = 500
+
+  validation {
+    condition     = var.agent_idle_session_ttl >= 60 && var.agent_idle_session_ttl <= 3600
+    error_message = "The agent_idle_session_ttl must be between 60 and 3600 seconds."
+  }
 }
 
 variable "knowledgebase_name" {
