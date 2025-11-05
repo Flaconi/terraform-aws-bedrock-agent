@@ -249,7 +249,7 @@ resource "aws_bedrockagent_data_source" "this" {
 resource "aws_bedrockagent_agent" "this" {
   agent_name                  = var.name
   agent_resource_role_arn     = aws_iam_role.agent.arn
-  idle_session_ttl_in_seconds = 500
+  idle_session_ttl_in_seconds = var.agent_idle_session_ttl
   foundation_model            = var.agent_model_id
   instruction                 = var.agent_instructions
 

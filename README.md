@@ -112,6 +112,14 @@ Type: `string`
 
 Default: `"anthropic.claude-v2"`
 
+### <a name="input_agent_idle_session_ttl"></a> [agent\_idle\_session\_ttl](#input\_agent\_idle\_session\_ttl)
+
+Description: Number of seconds for which Amazon Bedrock keeps information about a user's conversation with the agent. A user interaction remains active for the amount of time specified.
+
+Type: `number`
+
+Default: `500`
+
 ### <a name="input_knowledgebase_model_id"></a> [knowledgebase\_model\_id](#input\_knowledgebase\_model\_id)
 
 Description: Model identifier for Knowledgebase. (Deprecated) Use `knowledgebase_embedding_model_id` instead.
