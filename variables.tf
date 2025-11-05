@@ -25,6 +25,12 @@ variable "agent_instructions" {
   type        = string
 }
 
+variable "agent_idle_session_ttl" {
+  description = "Number of seconds for which Amazon Bedrock keeps information about a user's conversation with the agent. A user interaction remains active for the amount of time specified."
+  type        = number
+  default     = 500
+}
+
 variable "knowledgebase_name" {
   description = "Name for the knowledgebase."
   type        = string
